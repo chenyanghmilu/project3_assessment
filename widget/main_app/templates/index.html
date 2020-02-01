@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Wacky Widget</title>
+		<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"">
+	</head>
+	<body>
+		<main class="container">
+		{% block content %}
+            <h1>Wacky Widgets</h1>
+            {% if widget_list|length == 0 %}
+            <h3>No Widgets Exist</h3>
+            {% else %}
+            <table class="pure-table pure-table-striped">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tbody>
+                        {% for widget in widget_list %}
+                        <tr>
+                            <td>{{ widget.description }}</td>
+                            <td>{{ widget.quantity }}</td>
+                            <td><a href="{% url 'delete' widget.id %}">X</a></td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><b>Total Quantity</b></td>
+                            <td><b>{{ total }}</b></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </thead>
+            </table>
+            {% endif %}
+            <hr />
+            <h4>Add Widget</h4>
+            <form class="pure-form" action="{% url 'home' %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="pure-button" value="ADD WIDGET">
+            </form>
+		{% endblock %}
+		</main>
+	</body>
+</html>
